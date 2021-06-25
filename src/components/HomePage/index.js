@@ -35,14 +35,17 @@ function HomePage(props) {
 					fullWidth
 					variant="contained"
 					color="secondary"
-					component={Link}
-					to="/login"
+					onClick={gotoLogIn}
 					className={classes.submit}>
 					Login
           		</Button>
 			</Paper>
 		</main>
 	)
+
+	function gotoLogIn() {
+		props.changeState("Login");
+	}
 }
 
 export default withStyles(styles)(HomePage)

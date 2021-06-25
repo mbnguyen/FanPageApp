@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Typography, Paper, Avatar, Button, FormControl, Input, InputLabel } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -22,6 +22,7 @@ const styles = theme => ({
 		marginTop: 30,
 	},
 })
+
 
 function Login(props) {
 	const { classes } = props
@@ -63,12 +64,12 @@ function Login(props) {
 
 	async function login() {
 		try {
-			await firebase.login(email, password)
-			props.history.replace('/dashboard')
+			await firebase.login(email, password);
+			props.changeState("Dashboard");
 		} catch(error) {
 			alert(error.message)
 		}
 	}
 }
 
-export default withRouter(withStyles(styles)(Login))
+export default withStyles(styles)(Login)

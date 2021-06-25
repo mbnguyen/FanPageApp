@@ -3,9 +3,9 @@ import './styles.css'
 import HomePage from '../HomePage'
 import Login from '../Login'
 import Dashboard from '../Dashboard'
+import Admin from '../Admin'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { CircularProgress } from '@material-ui/core'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import firebase from '../firebase'
 
 const theme = createMuiTheme()
@@ -30,7 +30,7 @@ const styles = theme => ({
 
 export default function App() {
 
-	const [firebaseInitialized, setFirebaseInitialized] = useState(false)
+	const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 
 	useEffect(() => {
 		firebase.isInitialized().then(val => {
@@ -41,14 +41,33 @@ export default function App() {
 
 	return firebaseInitialized !== false ? (
 		<MuiThemeProvider theme={theme}>
-			<Router>
+			<Screen/>
+			{/* <Router>
 				<Switch>
 					<Route exact path="/" component={HomePage} />
 					<Route exact path="/login" component={Login} />
 					<Route exact path="/dashboard" component={Dashboard} />
 				</Switch>
-			</Router>
+			</Router> */}
 		</MuiThemeProvider>
 	) : <div id="loader"><CircularProgress /></div>
+}
+
+function Screen() {
+
+	const [state, setState] = useState("HomePage");
+
+	switch(state) {
+		case "HomePage":
+			return (<HomePage changeState={setState}/>);
+		case "Login":
+			return (<Login changeState={setState}/>);
+		case "Dashboard":
+			return (<Dashboard changeState={setState}/>);
+		default:
+			return (<CircularProgress/>);
+	}
+
+	
 }
 

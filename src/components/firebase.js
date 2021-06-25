@@ -19,20 +19,20 @@ class Firebase {
 	}
 
 	login(email, password) {
-		return this.auth.signInWithEmailAndPassword(email, password)
+		return this.auth.signInWithEmailAndPassword(email, password);
 	}
 
 	logout() {
 		return this.auth.signOut()
 	}
 
-	addQuote(quote) {
+	addMessage(msg) {
 		if(!this.auth.currentUser) {
 			return alert('Not authorized')
 		}
 
-		return this.db.doc(`users/${this.auth.currentUser.uid}`).set({
-			quote
+		return this.db.doc(`messages/message`).set({
+			msg
 		})
 	}
 
@@ -43,13 +43,31 @@ class Firebase {
 	}
 
 	getCurrentUsername() {
-		return this.auth.currentUser && this.auth.currentUser.email
+		return this.auth.currentUser && this.auth.currentUser.email;
 	}
 
-	async getCurrentUserQuote() {
-		const quote = await this.db.doc(`users/${this.auth.currentUser.uid}`).get()
-		return quote.get('firstName')
+	async getCurrentUserRole() {
+		const role = await this.db.doc(`users/${this.auth.currentUser.uid}`).get();
+		return role.get('role');
 	}
+
+	async getCurrentUserFirstName() {
+		const name = await this.db.doc(`users/${this.auth.currentUser.uid}`).get()
+		return name.get('firstName')
+	}
+
+	async getCurrentUserDate() {
+		const date = await this.db.doc(`users/${this.auth.currentUser.uid}`).get()
+		return date.get('date');
+	}
+
+	getMessage(props) {
+		this.db.collection("messages").doc("message").onSnapshot((doc) => {
+        	let msg = doc.get('msg')
+			props(msg);
+    	});
+	}
+
 }
 
 export default new Firebase()
